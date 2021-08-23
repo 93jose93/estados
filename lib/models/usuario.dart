@@ -1,7 +1,11 @@
 
 class Usuario{
+
+  //primitivos
    String nombre;
    int edad;
+
+  //lista
    List<String> profesiones;
 
   Usuario({
