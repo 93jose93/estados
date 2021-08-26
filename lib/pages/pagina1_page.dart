@@ -1,4 +1,7 @@
+import 'package:estados/bloc/usuario/usuario_bloc.dart';
+import 'package:estados/models/usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class Pagina1Screen extends StatelessWidget {
@@ -9,8 +12,26 @@ class Pagina1Screen extends StatelessWidget {
       appBar: AppBar(
         title: Text('AppBar 1'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => {
+              BlocProvider.of<UsuarioBloc>(context).add( BorrarUsuario() )
+            },
+            icon: Icon(Icons.exit_to_app)
+          )
+        ],
       ),
-      body: InformacionUsuario(),
+      body: BlocBuilder<UsuarioBloc, UsuarioState>(
+        builder: ( _ , state) {
+           if(state.existeUsuario) {
+             return InformacionUsuario( state.usuario );
+           } else {
+             return Center(
+               child: Text('No hay un usuario seleccionado'),
+             );
+           }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
        child: Icon(Icons.arrow_right),
        onPressed: () {
@@ -23,6 +44,9 @@ class Pagina1Screen extends StatelessWidget {
 
 class InformacionUsuario extends StatelessWidget {
   
+  final Usuario? usuario;
+
+  const InformacionUsuario(this.usuario);
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +62,16 @@ class InformacionUsuario extends StatelessWidget {
             Text('General', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
             Divider(),
 
-            ListTile( title: Text('Nombre: '),),
-            ListTile( title: Text('Edad: '),),
+            ListTile( title: Text('Nombre: ${ usuario!.nombre } '),),
+            ListTile( title: Text('Edad:  ${ usuario!.edad }'),),
 
             Text('Profesiones', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
             Divider(),
 
-            ListTile( title: Text('Profesion 1'),),
-            ListTile( title: Text('Profesion 2'),),
+            //ListTile( title: Text('Profesion 1'),),
+            ...usuario!.profesiones!.map(
+              (profesion) => ListTile( title: Text( profesion ),)
+            ).toList()
           ],
         ),
     );

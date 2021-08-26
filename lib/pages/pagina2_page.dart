@@ -1,4 +1,7 @@
+import 'package:estados/bloc/usuario/usuario_bloc.dart';
+import 'package:estados/models/usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class Pagina2Screen extends StatelessWidget {
@@ -18,6 +21,17 @@ class Pagina2Screen extends StatelessWidget {
               child:Text('Establecer Usuario', style: TextStyle(color: Colors.white,)),
               color:Colors.blue,
               onPressed: (){
+                 final newUser = new Usuario(
+                   nombre: 'Jose Sanchez',
+                   edad: 27,
+                   profesiones: ['FullStack Developer']
+                 );
+
+
+                //con block importamos la instancia
+                BlocProvider.of<UsuarioBloc>(context).add(
+                  ActivarUsuario(newUser)
+                );
 
               } 
             ),
@@ -25,14 +39,19 @@ class Pagina2Screen extends StatelessWidget {
               child:Text('Cambiar Edad', style: TextStyle(color: Colors.white,)),
               color:Colors.blue,
               onPressed: (){
-
+                    
+                BlocProvider.of<UsuarioBloc>(context).add(
+                  CambiarEdad(28)
+                );
               } 
             ),
             MaterialButton(
               child:Text('Añadir Profesion', style: TextStyle(color: Colors.white,)),
               color:Colors.blue,
               onPressed: (){
-
+                  BlocProvider.of<UsuarioBloc>(context).add(
+                  CambiarProfesion('Nueva Profesion')
+                ); 
               } 
             ),
           ],
